@@ -36,6 +36,7 @@ def gameover(screen: pg.Surface) -> None:
     pg.display.update()
     time.sleep(5)
 
+
 # 演習２
 def init_bb_imgs() -> tuple[list[pg.Surface], list[int]]:
     """
@@ -52,6 +53,7 @@ def init_bb_imgs() -> tuple[list[pg.Surface], list[int]]:
         bb_imgs.append(bb_img)
         
     return bb_imgs, bb_accs
+
 
 # 演習課題３
 def get_kk_imgs() -> dict[tuple[int, int], pg.Surface]:
@@ -74,6 +76,7 @@ def get_kk_imgs() -> dict[tuple[int, int], pg.Surface]:
         (+5, +5): pg.transform.rotozoom(img1, -45, 1.0),
     }
 
+
 def check_bound(rct: pg.Rect) -> tuple[bool, bool]:
     """
     引数：こうかとんRect or 爆弾Rect
@@ -86,6 +89,7 @@ def check_bound(rct: pg.Rect) -> tuple[bool, bool]:
     if rct.top < 0 or HEIGHT < rct.bottom:  # 縦方向判定
         tate = False
     return yoko, tate
+
 
 def main():
     pg.display.set_caption("逃げろ！こうかとん")
