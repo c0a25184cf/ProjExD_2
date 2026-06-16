@@ -53,7 +53,26 @@ def init_bb_imgs() -> tuple[list[pg.Surface], list[int]]:
         
     return bb_imgs, bb_accs
 
-
+# 演習課題３
+def get_kk_imgs() -> dict[tuple[int, int], pg.Surface]:
+    """
+    移動量に対応するこうかとん画像の辞書を生成する関数
+    戻り値：移動量タプルをキーとした画像Surfaceの辞書
+    """
+    img0 = pg.transform.rotozoom(pg.image.load("fig/3.png"), 0, 0.9)
+    img1 = pg.transform.flip(img0, True, False) # 右向きベースを作成
+    
+    return {
+        (0, 0): img0,
+        (+5, 0): img1,
+        (+5, -5): pg.transform.rotozoom(img1, 45, 1.0),
+        (0, -5): pg.transform.rotozoom(img1, 90, 1.0),
+        (-5, -5): pg.transform.rotozoom(img0, -45, 1.0),
+        (-5, 0): img0,
+        (-5, +5): pg.transform.rotozoom(img0, 45, 1.0),
+        (0, +5): pg.transform.rotozoom(img1, -90, 1.0),
+        (+5, +5): pg.transform.rotozoom(img1, -45, 1.0),
+    }
 
 def check_bound(rct: pg.Rect) -> tuple[bool, bool]:
     """
@@ -86,6 +105,12 @@ def main():
     # 演習課題２
     bb_imgs, bb_accs = init_bb_imgs()
     bb_rct = bb_imgs[0].get_rect() 
+
+    # 演習課題３
+    kk_imgs = get_kk_imgs()
+    kk_img = kk_imgs[(0, 0)] # 初期画像
+    kk_rct = kk_img.get_rect()
+    kk_rct.center = 300, 200
     
     clock = pg.time.Clock()
     tmr = 0
@@ -104,11 +129,14 @@ def main():
         current_bb_img = bb_imgs[idx]
         avx = vx * bb_accs[idx]
         avy = vy * bb_accs[idx]
+        yoko, tate = check_bound(bb_rct)
         bb_rct.width = current_bb_img.get_rect().width
         bb_rct.height = current_bb_img.get_rect().height
         bb_rct.move_ip(avx, avy) # 加速された速度で移動させる
         screen.blit(current_bb_img, bb_rct) # 描画するときは現在のサイズの画像を使う
         tmr += 1
+
+       
         
         screen.blit(bg_img, [0, 0]) 
 
@@ -131,6 +159,8 @@ def main():
         if check_bound(kk_rct) != (True, True):
             kk_rct.move_ip(-sum_mv[0], -sum_mv[1])
         screen.blit(kk_img, kk_rct)
+
+        kk_img = kk_imgs[tuple(sum_mv)]
 
 
         bb_rct.move_ip(vx, vy)
